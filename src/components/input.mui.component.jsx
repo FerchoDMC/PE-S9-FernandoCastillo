@@ -16,6 +16,7 @@ function InputMui({
     return (
         <>
         <TextField 
+        fullWidth
         type={type}
         placeholder={placeholder}
         value={value}

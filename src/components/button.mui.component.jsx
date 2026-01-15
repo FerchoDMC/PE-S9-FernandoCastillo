@@ -3,12 +3,13 @@ import Button from '@mui/material/Button';
 import LoginIcon from '@mui/icons-material/Login';
 
 
-function ButtonMUI({name, onClick= () => {}, backgroundColor = 'white', color ='white'}) {
+function ButtonMUI({name, onClick= () => {}, backgroundColor = 'white', color ='white', type='submit'}) {
     return (
         <>
             
             <Button 
-                type="submit"
+                fullWidth
+                type={type}
                 onClick={onClick} 
                 startIcon={<LoginIcon />} 
                 variant= "contained"
