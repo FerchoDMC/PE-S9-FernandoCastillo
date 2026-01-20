@@ -8,28 +8,44 @@ import Button from '../components/button.mui.component.jsx';
 import InputMui from '../components/input.mui.component.jsx';
 import { LoginService } from '../utils/login.js';
 import { useNavigate } from 'react-router-dom';
+import AlertMui from '../components/alert.mui.component.jsx';
 
 
 function LoginPage() {
-    
-  const [count, setCount] = useState(5)
-
-  const [asignature, setAsignature] = useState('');
-  const [creditos, setCreditos] = useState(undefined);
   const[user, setUser]= useState ('');
   const[passwd, setPasswd]= useState ('');
   const navigate = useNavigate ();
 
 
+  const [stateModal, setStateModal] = useState (
+    {
+      open: false,
+      title: 'Login',
+      message: 'Ingrese sus credenciales para iniciar sesion',
+      status: "info",
+    }
+  );
 
+
+
+  const handleCloseModal = () => {
+    setStateModal({...stateModal,open: false});
+  }
 
   const handleSendform =()=>{
     const resLogin = LoginService (user, passwd);
     console.log (resLogin);
     if (resLogin == null){
-        alert ("Login failed: invalid credentials");
+        setStateModal({
+          open: true,
+          title: 'Error de autentificacion',
+          message: 'Usuario o contraseña invalidas',
+          status: 'error'
+        })
     }else{
+        
         navigate ('/tablero');
+        
     }
   }
 
@@ -41,6 +57,14 @@ function LoginPage() {
 
   return (
   <>
+    <AlertMui 
+      open={stateModal.open} 
+      title={stateModal.title}
+      message={stateModal.message}
+      status={stateModal.status}
+      handleClose={handleCloseModal}
+      
+    />
     <Box sx={{ flexGrow: 1 }}>
       <Grid
         container
