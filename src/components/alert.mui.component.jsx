@@ -7,6 +7,8 @@ import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
+import Button from '../components/button.mui.component.jsx';
+import { Box } from '@mui/material';
 
 function AlertMui ({
     open = false, 
@@ -14,20 +16,27 @@ function AlertMui ({
     title = null, 
     message = null,
     status = 'info',
+    showBtnL = false,
+    showBtnR = false,
+    btnNameL = 'Aceptar',
+    btnNameR = 'Cancelar',
+    actionBtnL = () => {},
+    actionBtnR = () => {},
+
+
 }) {
     const handleGeticonbyStatus = ()=>{
         switch (status) {
             case 'warning':
-                return <WarningAmberIcon color='warning' sx={{fontSize: 40}} />;    
+                return <WarningAmberIcon color='warning' sx={{fontSize: 75}} />;    
             case 'error':
-                return <ErrorOutlineIcon color='error' sx={{fontSize: 40}} />;
+                return <ErrorOutlineIcon color='error' sx={{fontSize: 75}} />;
             case 'success':
-                return <CheckCircleOutlineIcon color='success' sx={{fontSize: 40}} />;
+                return <CheckCircleOutlineIcon color='success' sx={{fontSize: 75}} />;
             case 'info':
-                return <InfoOutlineIcon color='info' sx={{fontSize: 40}} />;
+                return <InfoOutlineIcon color='info' sx={{fontSize: 75}} />;
             default:
-                return <WarningAmberIcon color='warning' sx={{fontSize: 40}} />; 
-
+                return <WarningAmberIcon color='warning' sx={{fontSize: 75}} />; 
         }
     }
     return (
@@ -37,6 +46,10 @@ function AlertMui ({
                 onClose={handleClose}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
+                sx={{
+                    minWidth:'20vw'
+                }}
+
             >
                 {title &&
                     <DialogTitle id="alert-dialog-title">
@@ -44,16 +57,23 @@ function AlertMui ({
                     </DialogTitle>
                 }
                 <DialogContent>
-                    {
-                        handleGeticonbyStatus()
-                    }
+                    <Box display={'flex'} justifyContent={'center'} my={3}>
+                        {handleGeticonbyStatus()}
+                    </Box>
+
                     {message &&
-                    <DialogContentText id="alert-dialog-description">
+                    <DialogContentText id="alert-dialog-description" textAlign={'center'}>
                         {message}
                     </DialogContentText>
                     }
                 </DialogContent>
 
+                <DialogActions>
+
+                    {showBtnL && <Button name={btnNameL} onClick={actionBtnL} backgroundColor='blue' />}
+                    {showBtnR && <Button name={btnNameR} onClick={actionBtnR} backgroundColor='red' />}
+
+                </DialogActions>
                 
             
             

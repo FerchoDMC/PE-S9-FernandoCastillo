@@ -1,5 +1,5 @@
-import { useState } from 'react';
-
+import { useEffect, useState } from 'react';
+import { ReactSession } from 'react-client-session';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import IconButton from '@mui/material/IconButton';
@@ -12,57 +12,76 @@ import AlertMui from '../components/alert.mui.component.jsx';
 
 
 function LoginPage() {
-  const[user, setUser]= useState ('');
-  const[passwd, setPasswd]= useState ('');
-  const navigate = useNavigate ();
+  ReactSession.setStoreType("sessionStorage");
+  const [user, setUser] = useState('');
+  const [passwd, setPasswd] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
-
-  const [stateModal, setStateModal] = useState (
-    {
-      open: false,
-      title: 'Login',
-      message: 'Ingrese sus credenciales para iniciar sesion',
-      status: "info",
-    }
-  );
-
-
+  const [stateModal, setStateModal] = useState({
+    open: false,
+    title: 'Login',
+    message: '',
+    status: 'info',
+    showbtnl: false,
+    showbtnr: false,
+    btnNameR: '',
+    actionBtnL: () => {},
+    actionBtnR: () => {},
+  });
 
   const handleCloseModal = () => {
-    setStateModal({...stateModal,open: false});
-  }
+    setStateModal({ ...stateModal, open: false });
+  };
 
-  const handleSendform =()=>{
-    const resLogin = LoginService (user, passwd);
-    console.log (resLogin);
-    if (resLogin == null){
-        setStateModal({
-          open: true,
-          title: 'Error de autentificacion',
-          message: 'Usuario o contraseña invalidas',
-          status: 'error'
-        })
-    }else{
-        
-        navigate ('/tablero');
-        
+  const handleRegister = () => {
+    navigate('/registro');
+  };
+
+  useEffect(
+    () => {
+      ReactSession.remove("sessionUser");
+    }, 
+    []
+  );
+
+  const handleSendform = () => {
+    const resLogin = LoginService(user, passwd);
+    console.log(resLogin);
+
+    if (resLogin == null) {
+      setStateModal({
+        open: true,
+        title: 'Error de autenticación',
+        message: 'Usuario o contraseña inválidas',
+        status: 'error',
+        showbtnl: true,
+        showbtnr: true,
+        btnNameR: 'Registrarse',
+        actionBtnL: handleCloseModal,
+        actionBtnR: handleRegister,
+      });
     }
-  }
+    else {
+      ReactSession.set("sessionUser", JSON.stringify(resLogin));
+      navigate('/tablero');
+    }
+  };
 
-  const handleRegister =()=>{
-    navigate ('/registro');
-  }
-  
-  const [showPassword, setShowPassword] = useState (false);
 
   return (
   <>
     <AlertMui 
       open={stateModal.open} 
-      title={stateModal.title}
       message={stateModal.message}
       status={stateModal.status}
+      showBtnL={stateModal.showbtnl}
       handleClose={handleCloseModal}
+      actionBtnL={stateModal.actionBtnL}
+      showBtnR={stateModal.showbtnr}
+      btnNameR={stateModal.btnNameR}
+      actionBtnR={stateModal.actionBtnR}
+
       
     />
     <Box sx={{ flexGrow: 1 }}>

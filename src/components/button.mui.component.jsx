@@ -11,7 +11,6 @@ function ButtonMUI({name, onClick= () => {}, backgroundColor = 'white', color ='
                 fullWidth
                 type={type}
                 onClick={onClick} 
-                startIcon={<LoginIcon />} 
                 variant= "contained"
                 sx={{
                     color:color,
