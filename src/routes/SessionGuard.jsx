@@ -1,8 +1,8 @@
-import { ReactSession } from 'react-client-session';
+import { getDataUser } from '../storage/user.model.jsx';
 import { Navigate } from 'react-router-dom';
 
 function SessionGuard({childrenPage}) {
-    const isLogin = ReactSession.get("sessionUser")? true : false;
+    const isLogin = getDataUser() ? true : false;
     return isLogin ? childrenPage : <Navigate to="/ingreso" replace />;
 }
 

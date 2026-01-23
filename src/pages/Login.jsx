@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { ReactSession } from 'react-client-session';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import IconButton from '@mui/material/IconButton';
@@ -10,9 +9,10 @@ import { LoginService } from '../utils/login.js';
 import { useNavigate } from 'react-router-dom';
 import AlertMui from '../components/alert.mui.component.jsx';
 
+import { setUserData, rmDataUser } from '../storage/user.model.jsx';
+
 
 function LoginPage() {
-  ReactSession.setStoreType("sessionStorage");
   const [user, setUser] = useState('');
   const [passwd, setPasswd] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -38,13 +38,6 @@ function LoginPage() {
     navigate('/registro');
   };
 
-  useEffect(
-    () => {
-      ReactSession.remove("sessionUser");
-    }, 
-    []
-  );
-
   const handleSendform = () => {
     const resLogin = LoginService(user, passwd);
     console.log(resLogin);
@@ -61,12 +54,31 @@ function LoginPage() {
         actionBtnL: handleCloseModal,
         actionBtnR: handleRegister,
       });
+      return;
     }
-    else {
-      ReactSession.set("sessionUser", JSON.stringify(resLogin));
-      navigate('/tablero');
-    }
+
+    setUserData(resLogin);
+    navigateUser(resLogin?.role);
+    
   };
+
+  const navigateUser = (role) => {
+    switch (role) {
+      case "admin":
+        navigate('/tablero/registrohotel');
+        break;
+      default:
+        break;
+    }
+    
+  }
+
+  useEffect(
+    () => {
+      rmDataUser();
+    }, 
+    []
+  );
 
 
   return (
