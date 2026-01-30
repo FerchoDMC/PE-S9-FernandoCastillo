@@ -8,7 +8,8 @@ import RegisterPage from "../pages/Register"
 import SessionGuard from "./SessionGuard";
 import AuthAdmin from "./AuthAdmin";
 import RegisterHotelPage from "../pages/Admin/components/register.hotel";
-import ListHotelsPage from "../pages/Admin/components/list.hotel";
+import ListHotelsPage from "../pages/Admin/components/hotels";
+import LayoutAdminPage from "../pages/Admin";
 
 function RouterPages() {
     return(
@@ -17,23 +18,25 @@ function RouterPages() {
         <Route path="/ingreso" element={<LoginPage/>}/>
         <Route path="/home" element={<HomePage/>}/>
         <Route path="/registro" element={<RegisterPage/>}/>
+        
 
 
         <Route path="*" element={<Notfoundt/>}/>
 
         //? Route Protected
-        <Route 
-            path="/tablero" 
-            element={<AuthAdmin></AuthAdmin>}
-        >
-            //? = /tablero/registrohotel
-            <Route path="registrohotel" element={<RegisterHotelPage/>}/>
-            //? = /tablero/gestionhoteles
-            <Route path="gestionhoteles" element={<ListHotelsPage/>}/>
+        <Route element={<AuthAdmin></AuthAdmin>}>
 
-        </Route>
-    </Routes>
-    
+            <Route 
+                path="/tablero" 
+                element={<LayoutAdminPage></LayoutAdminPage>}
+            >
+                //? = /tablero/registrohotel
+                <Route path="registrohotel" element={<RegisterHotelPage/>}/>
+                //? = /tablero/gestionhoteles
+                <Route path="gestionhoteles" element={<ListHotelsPage/>}/>
+            </Route>            
+        </Route>       
+    </Routes>    
     </BrowserRouter>
     )
 }
